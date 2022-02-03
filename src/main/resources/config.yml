@@ -2,12 +2,14 @@ Enchants:
   ice_aspect:
     display: 'Ice Aspect'
     type: MELEE
+    trigger: DAMAGE
     max-level: 2
     mechanics:
       - SLOWNESS
   poison_touch:
     display: 'Poison Touch'
     type: MELEE
+    trigger: DAMAGE
     max-level: 2
     mechanics:
       - POISON

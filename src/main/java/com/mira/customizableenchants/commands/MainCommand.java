@@ -34,7 +34,7 @@ public class MainCommand implements CommandExecutor {
         if (args[0].equals("enchant")) {
             if (sender instanceof Player player) {
                 ItemStack item = player.getInventory().getItemInMainHand();
-                item = EnchantManager.enchantItem(item, args[1].toUpperCase(Locale.ROOT));
+                player.getInventory().setItemInMainHand(EnchantManager.enchantItem(item, args[1]));
             } else sender.sendMessage(ChatColor.DARK_GRAY + "CustomizableEnchants - " + ChatColor.RED + "This command can only be executed by a player!");
         }
         return false;

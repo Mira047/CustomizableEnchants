@@ -24,11 +24,11 @@ public class Mechanic {
     public Mechanic(String id, int level){
         this.level = level;
 
-        String type = main.getConfig().getString("Mechanics." + id + "type");
+        String type = main.getConfig().getString("Mechanics." + id + ".type");
 
         if(type != null && !type.trim().isEmpty()){
             if(type.equals("POTION")){
-                String input = main.getConfig().getString("Mechanics." + id + "effect");
+                String input = main.getConfig().getString("Mechanics." + id + ".effect");
 
                 String[] args = input.split(" ");
 
@@ -42,7 +42,7 @@ public class Mechanic {
         }
     }
 
-    public void applyMechanic(Entity target){
+    public void executeMechanic(Entity target){
         if(type.equals("POTION")){
             PotionEffect potion = new PotionEffect(effect,duration,amplifier);
             ((LivingEntity) (target)).addPotionEffect(potion);

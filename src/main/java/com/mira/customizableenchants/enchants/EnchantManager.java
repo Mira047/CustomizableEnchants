@@ -1,11 +1,14 @@
 package com.mira.customizableenchants.enchants;
 
 import com.mira.customizableenchants.CustomizableEnchants;
+import com.mira.customizableenchants.utils.MathUtils;
 import de.tr7zw.nbtapi.NBTItem;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EnchantManager {
@@ -14,17 +17,25 @@ public class EnchantManager {
     public static ItemStack enchantItem(@NotNull ItemStack item, @NotNull String enchantName){
         /* Enchant Tags */
         ItemMeta meta = item.getItemMeta();
-        List<String> lore = meta.getLore();
+        List<String> lore = new ArrayList<String>();
+        if(meta.hasLore()){
+            lore = meta.getLore();
+        }
 
+        lore.add(0, ChatColor.GRAY + main.getConfig().getString("Enchants." + enchantName + ".display") + " I");
 
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        
         NBTItem nbti = new NBTItem(item);
 
-        lore.add(0,main.getConfig().getString("Enchants." + enchantName + ".dispaly") + "I");
+        nbti.setInteger(enchantName,nbti.hasKey(enchantName) ? nbti.getInteger(enchantName)+1 : 1);
 
-        nbti.setInteger(main.getConfig().getString("Enchants." + enchantName),nbti.hasKey("Enchants." + enchantName) ? nbti.getInteger("Enchants." + enchantName)+1 : 1);
+        // meta = item.getItemMeta();
+        // lore.set(0, lore.get(0) + ChatColor.GRAY + " " +MathUtils.RomanNumerals(nbti.getInteger("Enchants." + enchantName)));
 
         item = nbti.getItem();
-
-        return item;
+        System.out.println(new NBTItem(item));
+        return nbti.getItem();
     }
 }
