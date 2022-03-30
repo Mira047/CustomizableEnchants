@@ -2,15 +2,13 @@ package com.mira.customizableenchants.commands;
 
 import com.mira.customizableenchants.CustomizableEnchants;
 
-import com.mira.customizableenchants.enchants.EnchantManager;
+import com.mira.customizableenchants.enchants.EnchantmentHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Locale;
 
 
 public class MainCommand implements CommandExecutor {
@@ -34,7 +32,7 @@ public class MainCommand implements CommandExecutor {
         if (args[0].equals("enchant")) {
             if (sender instanceof Player player) {
                 ItemStack item = player.getInventory().getItemInMainHand();
-                player.getInventory().setItemInMainHand(EnchantManager.enchantItem(item, args[1]));
+                player.getInventory().setItemInMainHand(EnchantmentHelper.enchantItem(item, args[1]));
             } else sender.sendMessage(ChatColor.DARK_GRAY + "CustomizableEnchants - " + ChatColor.RED + "This command can only be executed by a player!");
         }
         return false;
