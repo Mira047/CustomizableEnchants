@@ -85,16 +85,11 @@ public record Enchantment(String id, String display, EnchantType type, TriggerTy
         for (ItemStack stack : list) {;
             if (stack == null || stack.getType().isAir()) continue;
             NBTItem nbtItem = new NBTItem(stack);
-            System.out.println(nbtItem);
-            System.out.println(stack);
             if (nbtItem.hasKey(enchantment.id())) {
                 enchantedList.add(stack);
             }
         }
-
-        System.out.println(enchantment);;
-        System.out.println(enchantedList);
-
+        
         return enchantedList;
     }
 
