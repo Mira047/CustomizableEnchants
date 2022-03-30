@@ -33,11 +33,18 @@ public class MainCommand implements CommandExecutor {
         // Enchant Command
         if (args[0].equals("enchant")) {
             if (sender instanceof Player player) {
+
+                if (args.length < 2) {
+                    sender.sendMessage(ChatColor.DARK_GRAY + "CustomizableEnchants - " + ChatColor.RED + "Unknown enchantment!");
+                    return false;
+                }
+
                 ItemStack item = player.getInventory().getItemInMainHand();
 
                 Enchantment enchantment = ConfigHelper.getEnchantment(args[1]);
                 if (enchantment == null) {
                     sender.sendMessage(ChatColor.DARK_GRAY + "CustomizableEnchants - " + ChatColor.RED + "Unknown enchantment!");
+                    return false;
                 }
 
                 player.getInventory().setItemInMainHand(EnchantmentHelper.enchantItem(item, enchantment));

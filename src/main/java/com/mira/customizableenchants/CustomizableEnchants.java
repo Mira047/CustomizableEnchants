@@ -2,12 +2,14 @@ package com.mira.customizableenchants;
 
 import com.mira.customizableenchants.commands.MainCommand;
 import com.mira.customizableenchants.enchants.EnchantmentHelper;
+import com.mira.customizableenchants.listeners.EntityAttackListener;
 import com.mira.customizableenchants.misc.Metrics;
 
 import com.mira.customizableenchants.trigger.Trigger;
 import com.mira.customizableenchants.trigger.TriggerType;
 import com.mira.customizableenchants.utils.ConfigHelper;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventPriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -25,6 +27,8 @@ public class CustomizableEnchants extends JavaPlugin {
         Metrics metrics = new Metrics(this, pluginId);
 
         registerTickTask();
+
+        this.getServer().getPluginManager().registerEvents(new EntityAttackListener(), this);
 
         getLogger().info("CustomizableEnchants Enabled!");
     }

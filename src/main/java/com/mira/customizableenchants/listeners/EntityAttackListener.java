@@ -18,12 +18,12 @@ public class EntityAttackListener implements Listener {
         Entity damager = event.getDamager();
 
         if (damager instanceof Player player) {
-            Trigger trigger = new Trigger(TriggerType.DAMAGED, player, Optional.of(damaged));
+            Trigger trigger = new Trigger(TriggerType.DAMAGE, player, Optional.of(damaged));
             EnchantmentHelper.executeForAll(trigger);
         }
 
         if (damaged instanceof Player player) {
-            Trigger trigger = new Trigger(TriggerType.DAMAGE, player, Optional.of(damager));
+            Trigger trigger = new Trigger(TriggerType.DAMAGED, player, Optional.of(damager));
             EnchantmentHelper.executeForAll(trigger);
         }
     }

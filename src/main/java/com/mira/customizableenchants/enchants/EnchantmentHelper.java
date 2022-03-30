@@ -33,13 +33,17 @@ public class EnchantmentHelper {
 
         if (nbti.hasKey(enchantment.id())) {
             int level = nbti.getInteger(enchantment.id());
-            nbti.setInteger(enchantment.id(), ++level);
-
             Map.Entry<Integer, String> entry = getLoreEntry(lore, ChatColor.GRAY + enchantment.display());
-            lore.set(entry.getKey(), ChatColor.GRAY + enchantment.display() + MathUtils.toRoman(level));
+            lore.set(entry.getKey(), ChatColor.GRAY + enchantment.display() + " " + MathUtils.toRoman(level));
+            meta.setLore(lore);
+            nbti.getItem().setItemMeta(meta);
+
+            nbti.setInteger(enchantment.id(), ++level);
         } else {
+            lore.add(0, ChatColor.GRAY + enchantment.display() + " " + MathUtils.toRoman(1));
+            meta.setLore(lore);
+            nbti.getItem().setItemMeta(meta);
             nbti.setInteger(enchantment.id(), 1);
-            lore.add(0, ChatColor.GRAY + enchantment.display() + MathUtils.toRoman(1));
         }
 
         return nbti.getItem();
@@ -47,7 +51,7 @@ public class EnchantmentHelper {
 
     public static void executeForAll(Trigger trigger) {
         for (ItemStack stack : Enchantment.getCompatibleItems(trigger.player(), EnchantType.ALL)) {
-            if (stack == null) continue;
+            if (stack == null || stack.getType().isAir()) continue;
             HashMap<Enchantment, ItemStack> enchanted = Enchantment.getAllEnchantedItems(trigger.player());
 
             for (Map.Entry<Enchantment, ItemStack> key : enchanted.entrySet()) {
@@ -66,6 +70,7 @@ public class EnchantmentHelper {
                             enchantment, level, mechanic, trigger.triggeredBy());
 
                     mechanic.type().getExecutor().execute(newTrigger);
+                    System.out.println(mechanic.type().getExecutor());
                 }
             }
         }

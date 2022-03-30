@@ -44,7 +44,7 @@ public record Enchantment(String id, String display, EnchantType type, TriggerTy
     public static List<ItemStack> getCompatibleItems(Player player, EnchantType type1) {
         switch (type1) {
             case BOW, MELEE, CROSSBOW, TRIDENT, TOOL -> {
-                return Collections.singletonList(player.getActiveItem());
+                return Collections.singletonList(player.getInventory().getItemInMainHand());
             }
             case HELMET -> {
                 return Collections.singletonList(player.getInventory().getHelmet());
@@ -66,7 +66,7 @@ public record Enchantment(String id, String display, EnchantType type, TriggerTy
             case ALL -> {
                 List<ItemStack> stacks = new ArrayList<>();
                 stacks.addAll(Arrays.asList(player.getInventory().getArmorContents()));
-                stacks.add(player.getActiveItem());
+                stacks.add(player.getInventory().getItemInMainHand());
                 return stacks;
             }
             default -> {
@@ -82,14 +82,18 @@ public record Enchantment(String id, String display, EnchantType type, TriggerTy
     public static List<ItemStack> getEnchantedItems(Player player, Enchantment enchantment) {
         List<ItemStack> list = getCompatibleItems(player, enchantment.type());
         List<ItemStack> enchantedList = new ArrayList<>();
-
-        for (ItemStack stack : list) {
-            if (stack == null) continue;
+        for (ItemStack stack : list) {;
+            if (stack == null || stack.getType().isAir()) continue;
             NBTItem nbtItem = new NBTItem(stack);
+            System.out.println(nbtItem);
+            System.out.println(stack);
             if (nbtItem.hasKey(enchantment.id())) {
                 enchantedList.add(stack);
             }
         }
+
+        System.out.println(enchantment);;
+        System.out.println(enchantedList);
 
         return enchantedList;
     }
@@ -98,7 +102,7 @@ public record Enchantment(String id, String display, EnchantType type, TriggerTy
         HashMap<Enchantment, ItemStack> map = new HashMap<>();
         for (Enchantment enchantment : ConfigHelper.getEnchantments().values()) {
             for (ItemStack stack : getEnchantedItems(player, enchantment)) {
-                if (stack == null) continue;
+                if (stack == null || stack.getType().isAir()) continue;
                 map.put(enchantment, stack);
             }
         }

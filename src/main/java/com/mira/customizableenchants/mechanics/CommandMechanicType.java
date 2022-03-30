@@ -18,6 +18,7 @@ public class CommandMechanicType implements MechanicType {
 
     @Override
     public void execute(MechanicTrigger trigger) {
+        System.out.println("eee");
         String command = applyPlaceholders(trigger.mechanic().data(), trigger.player(), trigger.enchantment(), trigger.level());
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
     }
