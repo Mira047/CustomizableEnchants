@@ -2,41 +2,45 @@ package com.mira.customizableenchants.enchants;
 
 import com.mira.customizableenchants.CustomizableEnchants;
 import com.mira.customizableenchants.mechanics.Mechanic;
+import com.mira.customizableenchants.utils.MathUtils;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EnchantmentHelper {
     static CustomizableEnchants main = CustomizableEnchants.getPlugin(CustomizableEnchants.class);
 
+    private static Map.Entry<Integer, String> getLoreEntry(List<String> lore, String startWith) {
+        for (int i = 0; i < lore.size(); i++) {
+            String str = lore.get(i);
+            if (str.startsWith(startWith)) {
+                return new AbstractMap.SimpleEntry<>(i, str);
+            }
+        }
+        return new AbstractMap.SimpleEntry<>(0, "");
+    }
+
     public static ItemStack enchantItem(ItemStack item, Enchantment enchantment){
         ItemMeta meta = item.getItemMeta();
-        List<String> lore = new ArrayList<String>();
-        if(meta.hasLore()){
-            lore = meta.getLore();
-        }
-
-        lore.add(0, ChatColor.GRAY + enchantment.display() + " I");
-
-        meta.setLore(lore);
-        item.setItemMeta(meta);
-        
+        List<String> lore = new ArrayList<>();
+        if (meta.hasLore()) lore = meta.getLore();
         NBTItem nbti = new NBTItem(item);
 
-        nbti.setInteger(enchantName,nbti.hasKey(enchantName) ? nbti.getInteger(enchantName)+1 : 1);
+        if (nbti.hasKey(enchantment.id())) {
+            int level = nbti.getInteger(enchantment.id());
+            nbti.setInteger(enchantment.id(), ++level);
 
-        // meta = item.getItemMeta();
-        // lore.set(0, lore.get(0) + ChatColor.GRAY + " " +MathUtils.RomanNumerals(nbti.getInteger("Enchants." + enchantName)));
+            Map.Entry<Integer, String> entry = getLoreEntry(lore, ChatColor.GRAY + enchantment.display());
+            lore.set(entry.getKey(), ChatColor.GRAY + enchantment.display() + MathUtils.toRoman(level));
+        } else {
+            nbti.setInteger(enchantment.id(), 1);
+            lore.add(0, ChatColor.GRAY + enchantment.display() + MathUtils.toRoman(1));
+        }
 
-        item = nbti.getItem();
-        System.out.println(new NBTItem(item));
         return nbti.getItem();
     }
 
