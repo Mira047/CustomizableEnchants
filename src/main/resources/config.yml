@@ -13,13 +13,34 @@ Enchants:
     max-level: 2
     mechanics:
       - POISON
+  regeneration:
+    display: 'Regeneration'
+    type: ARMOR
+    trigger: PASSIVE
+    max-level: 3
+    mechanics:
+      - REGEN
+  smite:
+    display: 'Smite'
+    type: MELEE
+    trigger: DAMAGE
+    max-level: 1
+    mechanics:
+      - SMITE
+
 
 
 Mechanics:
   SLOWNESS:
     type: POTION
-    data: SLOW level*3 0 Target
+    data: SLOW level*3 0 target
   POISON:
     type: POTION
-    data: POISON level*2 level-1 Target
+    data: POISON level*2 level-1 target
+  SMITE:
+    type: COMMAND
+    data: summon lightning_bolt <player_x> <player_y> <player_z>
+  REGEN:
+    type: POTION
+    data: REGENERATION level 1 self
 

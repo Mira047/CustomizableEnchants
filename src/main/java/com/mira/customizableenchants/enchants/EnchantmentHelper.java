@@ -2,10 +2,11 @@ package com.mira.customizableenchants.enchants;
 
 import com.mira.customizableenchants.CustomizableEnchants;
 import com.mira.customizableenchants.mechanics.Mechanic;
+import com.mira.customizableenchants.trigger.MechanicTrigger;
+import com.mira.customizableenchants.trigger.Trigger;
 import com.mira.customizableenchants.utils.MathUtils;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -44,16 +45,19 @@ public class EnchantmentHelper {
         return nbti.getItem();
     }
 
-    public static void executeForAll(Player player, TriggerType trigger) {
-        for (ItemStack stack : Enchantment.getCompatibleItems(player, EnchantType.ALL)) {
+    /**
+     * @param trigger Must include player and type, optionally optionals
+     */
+    public static void executeForAll(Trigger trigger) {
+        for (ItemStack stack : Enchantment.getCompatibleItems(trigger.player(), EnchantType.ALL)) {
             if (stack == null) continue;
-            HashMap<Enchantment, ItemStack> enchanted = Enchantment.getAllEnchantedItems(player);
+            HashMap<Enchantment, ItemStack> enchanted = Enchantment.getAllEnchantedItems(trigger.player());
 
             for (Map.Entry<Enchantment, ItemStack> key : enchanted.entrySet()) {
                 ItemStack item = key.getValue();
                 Enchantment enchantment = key.getKey();
                 if (item == null || enchantment == null) continue;
-                if (enchantment.trigger() != trigger) continue;
+                if (enchantment.trigger() != trigger.type()) continue;
 
                 NBTItem nbti = new NBTItem(item);
 
@@ -61,7 +65,10 @@ public class EnchantmentHelper {
                 int level = nbti.getInteger(enchantment.id());
 
                 for (Mechanic mechanic : enchantment.mechanics()) {
-                    mechanic.type().getExecutor().execute(player, enchantment, mechanic, level);
+                    MechanicTrigger newTrigger = new MechanicTrigger(trigger.type(), trigger.player(),
+                            enchantment, level, mechanic, trigger.triggeredBy());
+
+                    mechanic.type().getExecutor().execute(newTrigger);
                 }
             }
         }

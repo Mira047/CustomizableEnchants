@@ -1,8 +1,7 @@
 package com.mira.customizableenchants.mechanics;
 
-import com.mira.customizableenchants.enchants.Enchantment;
-import org.bukkit.entity.Player;
+import com.mira.customizableenchants.trigger.MechanicTrigger;
 
 public interface MechanicType {
-    void execute(Player player, Enchantment enchantment, Mechanic mechanic, int level);
+    void execute(MechanicTrigger trigger);
 }

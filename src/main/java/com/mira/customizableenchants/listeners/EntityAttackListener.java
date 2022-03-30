@@ -1,12 +1,15 @@
 package com.mira.customizableenchants.listeners;
 
 import com.mira.customizableenchants.enchants.EnchantmentHelper;
-import com.mira.customizableenchants.enchants.TriggerType;
+import com.mira.customizableenchants.trigger.Trigger;
+import com.mira.customizableenchants.trigger.TriggerType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+
+import java.util.Optional;
 
 public class EntityAttackListener implements Listener {
     @EventHandler
@@ -15,11 +18,13 @@ public class EntityAttackListener implements Listener {
         Entity damager = event.getDamager();
 
         if (damager instanceof Player player) {
-            EnchantmentHelper.executeForAll(player, TriggerType.DAMAGED);
+            Trigger trigger = new Trigger(TriggerType.DAMAGED, player, Optional.of(damaged));
+            EnchantmentHelper.executeForAll(trigger);
         }
 
         if (damaged instanceof Player player) {
-            EnchantmentHelper.executeForAll(player, TriggerType.DAMAGE);
+            Trigger trigger = new Trigger(TriggerType.DAMAGE, player, Optional.of(damager));
+            EnchantmentHelper.executeForAll(trigger);
         }
     }
 }

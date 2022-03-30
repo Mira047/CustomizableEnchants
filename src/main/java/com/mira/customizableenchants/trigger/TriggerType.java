@@ -1,4 +1,4 @@
-package com.mira.customizableenchants.enchants;
+package com.mira.customizableenchants.trigger;
 
 public enum TriggerType {
     DAMAGE,

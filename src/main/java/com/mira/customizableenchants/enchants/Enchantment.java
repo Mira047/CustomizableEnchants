@@ -1,6 +1,7 @@
 package com.mira.customizableenchants.enchants;
 
 import com.mira.customizableenchants.mechanics.Mechanic;
+import com.mira.customizableenchants.trigger.TriggerType;
 import com.mira.customizableenchants.utils.ConfigHelper;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.entity.Player;

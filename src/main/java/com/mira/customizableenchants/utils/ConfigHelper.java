@@ -3,7 +3,7 @@ package com.mira.customizableenchants.utils;
 import com.mira.customizableenchants.CustomizableEnchants;
 import com.mira.customizableenchants.enchants.EnchantType;
 import com.mira.customizableenchants.enchants.Enchantment;
-import com.mira.customizableenchants.enchants.TriggerType;
+import com.mira.customizableenchants.trigger.TriggerType;
 import com.mira.customizableenchants.mechanics.Mechanic;
 import com.mira.customizableenchants.mechanics.MechanicTypes;
 import org.bukkit.configuration.ConfigurationSection;
