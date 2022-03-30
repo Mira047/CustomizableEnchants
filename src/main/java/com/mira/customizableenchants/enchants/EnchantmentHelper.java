@@ -55,8 +55,13 @@ public class EnchantmentHelper {
                 if (item == null || enchantment == null) continue;
                 if (enchantment.trigger() != trigger) continue;
 
+                NBTItem nbti = new NBTItem(item);
+
+                // can't be null because Enchantment.getAllEnchantedItems checks for that
+                int level = nbti.getInteger(enchantment.id());
+
                 for (Mechanic mechanic : enchantment.mechanics()) {
-                    mechanic.type().getExecutor().execute(player, enchantment, mechanic);
+                    mechanic.type().getExecutor().execute(player, enchantment, mechanic, level);
                 }
             }
         }
