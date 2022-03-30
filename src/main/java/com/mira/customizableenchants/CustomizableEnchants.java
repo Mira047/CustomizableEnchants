@@ -46,6 +46,6 @@ public class CustomizableEnchants extends JavaPlugin {
                     EnchantmentHelper.executeForAll(trigger);
                 }
             }
-        }.runTaskTimer(this, 1L, 1L);
+        }.runTaskTimer(this, 20L, 20L);
     }
 }
