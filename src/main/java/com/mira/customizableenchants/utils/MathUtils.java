@@ -60,7 +60,7 @@ public class MathUtils {
         }
     }
 
-    public static String RomanNumerals(int n){
+    public static String toRoman(int n){
         switch(n){
             case 1 -> {return "I";}
             case 2 -> {return "II";}
