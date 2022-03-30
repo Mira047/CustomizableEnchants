@@ -19,17 +19,13 @@ public enum EnchantType {
 
     ALL;
 
-    private static final HashMap<String, EnchantType> BY_NAME = new HashMap<>();;
+    private static final HashMap<String, EnchantType> BY_NAME = new HashMap<>();
 
-    public static EnchantType matchType(String name) {
+    public static EnchantType getType(String name) {
         String filtered = name.toUpperCase(Locale.ENGLISH);
-
-        return getType(filtered);
+        return BY_NAME.get(name);
     }
 
-    private static EnchantType getType(String name) {
-        return (EnchantType)BY_NAME.get(name);
-    }
 
     static {
         EnchantType[] var0 = values();

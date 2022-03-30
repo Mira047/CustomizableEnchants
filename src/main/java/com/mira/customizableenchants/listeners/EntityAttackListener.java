@@ -1,53 +1,30 @@
 package com.mira.customizableenchants.listeners;
 
-import com.mira.customizableenchants.CustomizableEnchants;
-import com.mira.customizableenchants.enchants.Enchant;
-import com.mira.customizableenchants.utils.ItemUtils;
+import com.mira.customizableenchants.enchants.EnchantmentHelper;
+import com.mira.customizableenchants.trigger.Trigger;
+import com.mira.customizableenchants.trigger.TriggerType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemStack;
+
+import java.util.Optional;
 
 public class EntityAttackListener implements Listener {
-    CustomizableEnchants main = CustomizableEnchants.getPlugin(CustomizableEnchants.class);
-
     @EventHandler
     public void onEntityAttack(EntityDamageByEntityEvent event) {
-        Entity entity = event.getEntity();
+        Entity damaged = event.getEntity();
         Entity damager = event.getDamager();
 
-        if(damager instanceof Player player){
-            // TODO: ALL AND ARMOR
-            main.getConfig().getConfigurationSection("Enchants").getKeys(false).forEach(key -> {
-                if(!main.getConfig().getString("Enchants." + key + ".type").equals("ARMOR")||!main.getConfig().getString("Enchants." + key + ".type").equals("ALL")) {
-                    ItemStack item = ItemUtils.getItemByType(player, key);
+        if (damager instanceof Player player) {
+            Trigger trigger = new Trigger(TriggerType.DAMAGE, player, Optional.of(damaged));
+            EnchantmentHelper.executeForAll(trigger);
+        }
 
-                    if(item==null) return;
-
-                    Enchant e = new Enchant(key);
-
-                    if(!e.getTrigger().equals("DAMAGE")) return;
-
-                    e.executeMechanics(player, entity);
-                }
-            });
-        } else if(entity instanceof Player player){
-            // TODO: ALL AND ARMOR
-            main.getConfig().getConfigurationSection("Enchants").getKeys(false).forEach(key -> {
-                if(!main.getConfig().getString("Enchants." + key + ".type").equals("ARMOR")||!main.getConfig().getString("Enchants." + key + ".type").equals("ALL")) {
-                    ItemStack item = ItemUtils.getItemByType(player, key);
-
-                    if(item==null) return;
-
-                    Enchant e = new Enchant(key);
-
-                    if(!e.getTrigger().equals("DAMAGED")) return;
-
-                    e.executeMechanics(player, damager);
-                }
-            });
+        if (damaged instanceof Player player) {
+            Trigger trigger = new Trigger(TriggerType.DAMAGED, player, Optional.of(damager));
+            EnchantmentHelper.executeForAll(trigger);
         }
     }
 }

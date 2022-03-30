@@ -2,15 +2,15 @@ package com.mira.customizableenchants.commands;
 
 import com.mira.customizableenchants.CustomizableEnchants;
 
-import com.mira.customizableenchants.enchants.EnchantManager;
+import com.mira.customizableenchants.enchants.Enchantment;
+import com.mira.customizableenchants.enchants.EnchantmentHelper;
+import com.mira.customizableenchants.utils.ConfigHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Locale;
 
 
 public class MainCommand implements CommandExecutor {
@@ -33,8 +33,21 @@ public class MainCommand implements CommandExecutor {
         // Enchant Command
         if (args[0].equals("enchant")) {
             if (sender instanceof Player player) {
+
+                if (args.length < 2) {
+                    sender.sendMessage(ChatColor.DARK_GRAY + "CustomizableEnchants - " + ChatColor.RED + "Unknown enchantment!");
+                    return false;
+                }
+
                 ItemStack item = player.getInventory().getItemInMainHand();
-                player.getInventory().setItemInMainHand(EnchantManager.enchantItem(item, args[1]));
+
+                Enchantment enchantment = ConfigHelper.getEnchantment(args[1]);
+                if (enchantment == null) {
+                    sender.sendMessage(ChatColor.DARK_GRAY + "CustomizableEnchants - " + ChatColor.RED + "Unknown enchantment!");
+                    return false;
+                }
+
+                player.getInventory().setItemInMainHand(EnchantmentHelper.enchantItem(item, enchantment));
             } else sender.sendMessage(ChatColor.DARK_GRAY + "CustomizableEnchants - " + ChatColor.RED + "This command can only be executed by a player!");
         }
         return false;
