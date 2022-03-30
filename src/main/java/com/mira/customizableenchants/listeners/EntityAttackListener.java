@@ -1,8 +1,10 @@
 package com.mira.customizableenchants.listeners;
 
 import com.mira.customizableenchants.CustomizableEnchants;
-import com.mira.customizableenchants.enchants.Enchant;
-import com.mira.customizableenchants.utils.ItemUtils;
+import com.mira.customizableenchants.enchants.EnchantType;
+import com.mira.customizableenchants.enchants.Enchantment;
+import com.mira.customizableenchants.enchants.TriggerType;
+import com.mira.customizableenchants.mechanics.Mechanic;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,44 +12,51 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class EntityAttackListener implements Listener {
     CustomizableEnchants main = CustomizableEnchants.getPlugin(CustomizableEnchants.class);
 
     @EventHandler
     public void onEntityAttack(EntityDamageByEntityEvent event) {
-        Entity entity = event.getEntity();
+        Entity damaged = event.getEntity();
         Entity damager = event.getDamager();
 
-        if(damager instanceof Player player){
-            // TODO: ALL AND ARMOR
-            main.getConfig().getConfigurationSection("Enchants").getKeys(false).forEach(key -> {
-                if(!main.getConfig().getString("Enchants." + key + ".type").equals("ARMOR")||!main.getConfig().getString("Enchants." + key + ".type").equals("ALL")) {
-                    ItemStack item = ItemUtils.getItemByType(player, key);
+        if (damager instanceof Player player) {
+            for (ItemStack stack : Enchantment.getCompatibleItems(player, EnchantType.ALL)) {
+                if (stack == null) continue;
+                HashMap<Enchantment, ItemStack> enchanted = Enchantment.getAllEnchantedItems(player);
 
-                    if(item==null) return;
+                for (Map.Entry<Enchantment, ItemStack> key : enchanted.entrySet()) {
+                    ItemStack item = key.getValue();
+                    Enchantment enchantment = key.getKey();
+                    if (item == null || enchantment == null) continue;
+                    if (enchantment.trigger() != TriggerType.DAMAGE) continue;
 
-                    Enchant e = new Enchant(key);
-
-                    if(!e.getTrigger().equals("DAMAGE")) return;
-
-                    e.executeMechanics(player, entity);
+                    for (Mechanic mechanic : enchantment.mechanics()) {
+                        mechanic.type().getExecutor().execute(player, enchantment, mechanic);
+                    }
                 }
-            });
-        } else if(entity instanceof Player player){
-            // TODO: ALL AND ARMOR
-            main.getConfig().getConfigurationSection("Enchants").getKeys(false).forEach(key -> {
-                if(!main.getConfig().getString("Enchants." + key + ".type").equals("ARMOR")||!main.getConfig().getString("Enchants." + key + ".type").equals("ALL")) {
-                    ItemStack item = ItemUtils.getItemByType(player, key);
+            }
+        }
 
-                    if(item==null) return;
+        if (damaged instanceof Player player) {
+            for (ItemStack stack : Enchantment.getCompatibleItems(player, EnchantType.ALL)) {
+                if (stack == null) continue;
+                HashMap<Enchantment, ItemStack> enchanted = Enchantment.getAllEnchantedItems(player);
 
-                    Enchant e = new Enchant(key);
+                for (Map.Entry<Enchantment, ItemStack> key : enchanted.entrySet()) {
+                    ItemStack item = key.getValue();
+                    Enchantment enchantment = key.getKey();
+                    if (item == null || enchantment == null) continue;
+                    if (enchantment.trigger() != TriggerType.DAMAGE) continue;
 
-                    if(!e.getTrigger().equals("DAMAGED")) return;
-
-                    e.executeMechanics(player, damager);
+                    for (Mechanic mechanic : enchantment.mechanics()) {
+                        mechanic.type().getExecutor().execute(player, enchantment, mechanic);
+                    }
                 }
-            });
+            }
         }
     }
 }

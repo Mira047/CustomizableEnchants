@@ -2,7 +2,10 @@ package com.mira.customizableenchants.utils;
 
 import com.mira.customizableenchants.CustomizableEnchants;
 import com.mira.customizableenchants.enchants.EnchantType;
+import com.mira.customizableenchants.enchants.Enchantment;
 import com.mira.customizableenchants.enchants.TriggerType;
+import com.mira.customizableenchants.mechanics.Mechanic;
+import com.mira.customizableenchants.mechanics.MechanicTypes;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
@@ -39,7 +42,7 @@ public class ConfigHelper {
             String type = section.getString("type");
             String data = section.getString("data");
 
-            Mechanic mechanic = new Mechanic(mech, type, data);
+            Mechanic mechanic = new Mechanic(mech, MechanicTypes.valueOf(type), data);
             mechanics.put(mech, mechanic);
         }
 

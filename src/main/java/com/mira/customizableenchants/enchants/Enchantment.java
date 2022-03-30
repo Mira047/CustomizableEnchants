@@ -1,15 +1,12 @@
-package com.mira.customizableenchants.utils;
+package com.mira.customizableenchants.enchants;
 
-import com.mira.customizableenchants.enchants.EnchantType;
-import com.mira.customizableenchants.enchants.TriggerType;
+import com.mira.customizableenchants.mechanics.Mechanic;
+import com.mira.customizableenchants.utils.ConfigHelper;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public record Enchantment(String id, String display, EnchantType type, TriggerType trigger, int maxLevel, List<Mechanic> mechanics) {
     public Mechanic getMechanic(String id) {
@@ -94,6 +91,17 @@ public record Enchantment(String id, String display, EnchantType type, TriggerTy
         }
 
         return enchantedList;
+    }
+
+    public static HashMap<Enchantment, ItemStack> getAllEnchantedItems(Player player) {
+        HashMap<Enchantment, ItemStack> map = new HashMap<>();
+        for (Enchantment enchantment : ConfigHelper.getEnchantments().values()) {
+            for (ItemStack stack : getEnchantedItems(player, enchantment)) {
+                if (stack == null) continue;
+                map.put(enchantment, stack);
+            }
+        }
+        return map;
     }
 
     public List<ItemStack> getEnchantedItems(Player player) {

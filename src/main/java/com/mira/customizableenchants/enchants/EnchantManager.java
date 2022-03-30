@@ -9,20 +9,20 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class EnchantManager {
     static CustomizableEnchants main = CustomizableEnchants.getPlugin(CustomizableEnchants.class);
 
-    public static ItemStack enchantItem(@NotNull ItemStack item, @NotNull String enchantName){
-        /* Enchant Tags */
+    public static ItemStack enchantItem(ItemStack item, Enchantment enchantment){
         ItemMeta meta = item.getItemMeta();
         List<String> lore = new ArrayList<String>();
         if(meta.hasLore()){
             lore = meta.getLore();
         }
 
-        lore.add(0, ChatColor.GRAY + main.getConfig().getString("Enchants." + enchantName + ".display") + " I");
+        lore.add(0, ChatColor.GRAY + enchantment.display() + " I");
 
         meta.setLore(lore);
         item.setItemMeta(meta);
