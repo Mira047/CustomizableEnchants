@@ -3,6 +3,7 @@ package com.mira.customizableenchants;
 import com.mira.customizableenchants.commands.MainCommand;
 import com.mira.customizableenchants.misc.Metrics;
 
+import com.mira.customizableenchants.utils.ConfigHelper;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CustomizableEnchants extends JavaPlugin {
@@ -11,6 +12,7 @@ public class CustomizableEnchants extends JavaPlugin {
 
         saveDefaultConfig();
         reloadConfig();
+        ConfigHelper.load();
 
         this.getCommand("customizableenchants").setExecutor(new MainCommand());
 

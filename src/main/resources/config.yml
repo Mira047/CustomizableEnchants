@@ -18,8 +18,8 @@ Enchants:
 Mechanics:
   SLOWNESS:
     type: POTION
-    effect: SLOW level*3 0 Target
+    data: SLOW level*3 0 Target
   POISON:
     type: POTION
-    effect: POISON level*2 level-1 Target
+    data: POISON level*2 level-1 Target
 
