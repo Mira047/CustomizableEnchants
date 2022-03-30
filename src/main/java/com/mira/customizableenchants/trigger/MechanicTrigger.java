@@ -8,5 +8,5 @@ import org.bukkit.entity.Player;
 import java.util.Optional;
 
 public record MechanicTrigger(TriggerType type, Player player, Enchantment enchantment,
-                              int level, Mechanic mechanic, Optional<Entity> triggeredBy) {
+                              int level, Mechanic mechanic, Optional<Entity> entity) {
 }
