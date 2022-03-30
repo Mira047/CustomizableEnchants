@@ -45,9 +45,6 @@ public class EnchantmentHelper {
         return nbti.getItem();
     }
 
-    /**
-     * @param trigger Must include player and type, optionally optionals
-     */
     public static void executeForAll(Trigger trigger) {
         for (ItemStack stack : Enchantment.getCompatibleItems(trigger.player(), EnchantType.ALL)) {
             if (stack == null) continue;
