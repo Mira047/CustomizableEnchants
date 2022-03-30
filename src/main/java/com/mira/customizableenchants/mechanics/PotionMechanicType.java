@@ -14,6 +14,8 @@ public class PotionMechanicType implements MechanicType {
         int duration = MathUtils.evaluateQuestion(args[1], trigger.level());
         int amplifier = MathUtils.evaluateQuestion(args[2], trigger.level());
 
+        if (effect == null) return;
+
         PotionEffect potion = new PotionEffect(effect, duration, amplifier);
 
         if (args[3].equalsIgnoreCase("target") && trigger.entity().isPresent()) {
